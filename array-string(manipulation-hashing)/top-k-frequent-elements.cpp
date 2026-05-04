@@ -1,36 +1,76 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// class Solution {
+// public:
+// vector<int> topKFrequent(vector<int>& nums, int k) {
+//     unordered_map<int,int> freq;
+//     for (int x : nums) {
+//     freq[x]++;
+//     }
+
+
+//     priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+
+//     for (auto &p : freq) {
+//         pq.push({p.second, p.first});
+//         if (pq.size() > k) {
+//             pq.pop();
+//         }
+//     }
+
+//     vector<int> ans;
+//     ans.reserve(k);
+//     while (!pq.empty()) {
+//         ans.push_back(pq.top().second);
+//         pq.pop();
+//     }
+
+//     reverse(ans.begin(), ans.end()); // optional for sorted output
+//     return ans;
+// }
+
+
+// };
+
+
 class Solution {
 public:
-vector<int> topKFrequent(vector<int>& nums, int k) {
-    unordered_map<int,int> freq;
-    for (int x : nums) {
-    freq[x]++;
-    }
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+         unordered_map<int, int> freq;
 
-
-    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
-
-    for (auto &p : freq) {
-        pq.push({p.second, p.first});
-        if (pq.size() > k) {
-            pq.pop();
+        // Step 1: Count frequency
+        for (int num : nums) {
+            freq[num]++;
         }
+
+        // Step 2: Create buckets
+        vector<vector<int>> bucket(nums.size() + 1);
+
+        for (auto it : freq) {
+            int number = it.first;
+            int count = it.second;
+
+            bucket[count].push_back(number);
+        }
+
+        // Step 3: Collect top k frequent elements
+        vector<int> ans;
+
+        for (int i = bucket.size() - 1; i >= 0; i--) {
+            for (int num : bucket[i]) {
+                ans.push_back(num);
+
+                if (ans.size() == k) {
+                    return ans;
+                }
+            }
+        }
+
+        return ans;
     }
-
-    vector<int> ans;
-    ans.reserve(k);
-    while (!pq.empty()) {
-        ans.push_back(pq.top().second);
-        pq.pop();
-    }
-
-    reverse(ans.begin(), ans.end()); // optional for sorted output
-    return ans;
-}
-
-
+   
+   
 };
 
 int main() {
